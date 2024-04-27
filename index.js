@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const patient = require("./Model/patientAppoinment");
 const Doctor = require("./Model/DoctorSchema");
 
+const PORT = process.env.PORT || 8000
+
 app.use(express.json());
 app.use(cors());
 
@@ -232,6 +234,6 @@ app.put("/Doctors/signup/:id", async (req, res) => {
   }
 });
 
-server.listen(8000, () => {
-  console.log("server is running on 8000");
+server.listen(PORT, () => {
+  console.log(`server is running on ${PORT}`);
 });
