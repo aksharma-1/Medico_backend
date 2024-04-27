@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 require("./db/connection");
 const express = require("express");
@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const patient = require("./Model/patientAppoinment");
 const Doctor = require("./Model/DoctorSchema");
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(cors());
@@ -20,13 +20,18 @@ const { Server } = require("socket.io");
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_PORT,
     methods: ["GET", "POST"],
   },
 });
 
 io.on("connection", (socket) => {
   console.log("a user connected");
+
+  socket.on("disconnect", () => {
+    console.log("a user disconnected");
+  });
+
 });
 
 // formating  today data
@@ -120,7 +125,7 @@ app.put("/Appoinments/:id", async (req, res) => {
       const today = formatDate();
       const todayAppointments = await patient.find({ date: today });
       io.emit("todayAppointments", todayAppointments);
-      
+
       res.json({ message: "Appointment updated successfully" });
     } else {
       res.json({ error: "Appointment not found" });
